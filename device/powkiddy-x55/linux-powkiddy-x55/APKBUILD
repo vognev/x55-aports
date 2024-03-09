@@ -1,0 +1,72 @@
+# Reference: <https://postmarketos.org/vendorkernel>
+# Kernel config based on: arch/arm64/configs/(CHANGEME!)
+
+pkgname=linux-powkiddy-x55
+pkgver=6.8_rc7
+pkgrel=0
+pkgdesc="Kernel for Powkiddy X55"
+arch="aarch64"
+_carch="arm64"
+_flavor="powkiddy-x55"
+url="https://kernel.org"
+license="GPL-2.0-only"
+options="!strip !check !tracedeps pmb:cross-native"
+makedepends="
+	bash
+	bc
+	bison
+	devicepkg-dev
+	findutils
+	flex
+	linux-headers
+	openssl-dev
+	perl
+	xz
+"
+
+# Source
+_config="config-$_flavor.$arch"
+source="
+ 	https://git.kernel.org/torvalds/t/linux-6.8-rc7.tar.gz
+	$_config
+"
+builddir="$srcdir/linux-6.8-rc7"
+_outdir="out"
+
+[ -z "$HOSTCC" ] || _hostcc="HOSTCC=$HOSTCC"
+
+prepare() {
+	default_prepare
+
+	mkdir -p "$builddir/$_outdir"
+
+	cp "$srcdir/$_config" "$builddir"/"$_outdir"/.config
+
+	make -C "$builddir" O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" $_hostcc olddefconfig
+}
+
+build() {
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" $_hostcc \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1 ))-postmarketOS" \
+		Image modules rockchip/rk3566-powkiddy-x55.dtb
+}
+
+package() {
+	KERNEL_IMAGE_NAME=Image \
+	downstreamkernel_package "$builddir" "$pkgdir" "$_carch" \
+		"$_flavor" "$_outdir"
+
+	install -Dm644 "$builddir"/"$_outdir"/arch/arm64/boot/dts/rockchip/rk3566-powkiddy-x55.dtb "$pkgdir/usr/share/dtb/rk3566-powkiddy-x55.dtb"
+
+	unset LDFLAGS
+	make O="$_outdir" ARCH="$_carch" CC="${CC:-gcc}" \
+		KBUILD_BUILD_VERSION="$((pkgrel + 1))-postmarketOS" \
+		INSTALL_MOD_PATH="$pkgdir/" INSTALL_MOD_STRIP=1 \
+		modules_install
+}
+
+sha512sums="
+14dfe21da64bd625548f3439a878b46010c7c9c0569ca320dacc2219c297e2c1a8e3cb95c7c497b1177d3e4f6f6ea94b2a622cf75db86fd4a8edeccdfdeed42a  linux-6.8-rc7.tar.gz
+34a9640e3195dd6fa972e8c9dde841cad51786791f59eae35b52ea8edf9eac189532cd3808c2cd5f627b9b61c1265ce87b868aa5179147a5b5beb10f4c094982  config-powkiddy-x55.aarch64
+"

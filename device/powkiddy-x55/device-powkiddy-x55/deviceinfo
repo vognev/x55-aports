@@ -1,0 +1,33 @@
+# Reference: <https://postmarketos.org/deviceinfo>
+# Please use double quotes only. You can source this file in shell
+# scripts.
+
+deviceinfo_format_version="0"
+deviceinfo_name="Powkiddy X55"
+deviceinfo_manufacturer="Powkiddy"
+deviceinfo_codename="powkiddy-x55"
+deviceinfo_year="2023"
+deviceinfo_dtb=""
+deviceinfo_arch="aarch64"
+
+# Device related
+deviceinfo_chassis="tablet"
+deviceinfo_keyboard="false"
+deviceinfo_external_storage="true"
+
+# Bootloader related
+deviceinfo_flash_method="none"
+deviceinfo_uboot_boardname="powkiddy-x55"
+deviceinfo_dtb="rk3566-powkiddy-x55"
+
+deviceinfo_sd_embed_firmware="u-boot/powkiddy-x55/idbloader.img:64,u-boot/powkiddy-x55/u-boot.itb:16384"
+deviceinfo_sd_embed_firmware_step_size="512"
+
+deviceinfo_generate_extlinux_config="true"
+deviceinfo_kernel_cmdline="earlycon PMOS_NO_OUTPUT_REDIRECT PMOS_FORCE_PARTITION_RESIZE PMOS_NOSPLASH console=ttyS2,1500000 console=tty0"
+
+# partitioning settings
+deviceinfo_partition_type="gpt"
+# sectors to skip for sd bootloader stuff
+deviceinfo_boot_part_start="32768"
+deviceinfo_boot_filesystem="fat32"
