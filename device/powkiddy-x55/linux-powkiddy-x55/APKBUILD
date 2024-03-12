@@ -2,7 +2,7 @@
 # Kernel config based on: arch/arm64/configs/(CHANGEME!)
 
 pkgname=linux-powkiddy-x55
-pkgver=6.8_rc7
+pkgver=6.8
 pkgrel=0
 pkgdesc="Kernel for Powkiddy X55"
 arch="aarch64"
@@ -27,10 +27,10 @@ makedepends="
 # Source
 _config="config-$_flavor.$arch"
 source="
- 	https://git.kernel.org/torvalds/t/linux-6.8-rc7.tar.gz
+ 	https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.tar.xz
 	$_config
 "
-builddir="$srcdir/linux-6.8-rc7"
+builddir="$srcdir/linux-6.8"
 _outdir="out"
 
 [ -z "$HOSTCC" ] || _hostcc="HOSTCC=$HOSTCC"
@@ -67,6 +67,6 @@ package() {
 }
 
 sha512sums="
-14dfe21da64bd625548f3439a878b46010c7c9c0569ca320dacc2219c297e2c1a8e3cb95c7c497b1177d3e4f6f6ea94b2a622cf75db86fd4a8edeccdfdeed42a  linux-6.8-rc7.tar.gz
+5c4eb4aa1d3f7d1ea01c0f7ddeadacdece6e144fd4bdfc16b2b925d3e10dc04de3a6db69320b79a96c3560052616f001d2c09e7a1bb4f7b731e2380a7ecce068  linux-6.8.tar.xz
 34a9640e3195dd6fa972e8c9dde841cad51786791f59eae35b52ea8edf9eac189532cd3808c2cd5f627b9b61c1265ce87b868aa5179147a5b5beb10f4c094982  config-powkiddy-x55.aarch64
 "
